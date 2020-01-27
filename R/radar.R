@@ -104,13 +104,13 @@ radar_graph <- function(df,
 #'
 #' @noRd
 index_percent <- function(df, index, weighting_function,index_threshold) {
-  df <- filter(df, !is.na(!! sym(index)))
   if (!is.null(weighting_function)) {
     df$weights <- weighting_function(df)
   } else {
     df$weights <- rep(1, nrow(df))
   }
 
+  df <- filter(df, !is.na(!! sym(index)))
   df <- summarize(df, !! sym(index) := sum((!! sym(index) >= index_threshold) * weights) / sum(weights))
   pull(df, !! sym(index))
 }

@@ -35,15 +35,15 @@ index_chart <- function(df,
                         path = NULL,
                         language = "en") {
 
-  df <- df %>%
-    group_by(!!sym(group)) %>%
-    filter(!is.na(!!sym(index)))
-
   if (is.null(weighting_function)) {
     df$weights <- rep(1, nrow(df))
   } else {
     df$weights <- weighting_function(df)
   }
+
+  df <- df %>%
+    group_by(!!sym(group)) %>%
+    filter(!is.na(!!sym(index)))
 
   data <- df %>% summarize(index_1 = 100 * sum((!!sym(index) == 1) * weights) / sum(weights),
                            index_2 = 100 * sum((!!sym(index) == 2) * weights) / sum(weights),

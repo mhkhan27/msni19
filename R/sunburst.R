@@ -13,12 +13,6 @@
 #'
 #' @return plot_ly plot object
 sunburst <- function(df, cols, labels, parents, weighting_function = NULL, colors, na.rm = T) {
-  if (is.null(weighting_function)) {
-    df$weights <- rep(1, nrow(df))
-  } else {
-    df$weights <- weighting_function(df)
-  }
-
   data <- summarize_at(df, cols, ~ sum(.x * weights, na.rm = na.rm))
 
   # Extracting exact percents from the data
@@ -101,6 +95,12 @@ sunburst_msni <- function(df,
                           path = NULL,
                           language = "en") {
   language <- match.arg(language, c("en", "fr"))
+
+  if (is.null(weighting_function)) {
+    df$weights <- rep(1, nrow(df))
+  } else {
+    df$weights <- weighting_function(df)
+  }
 
   data <- df %>% filter(!!sym(msni) %in% msni_filter) %>%
     mutate(msni = rep(1, nrow(.)),
