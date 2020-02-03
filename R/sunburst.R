@@ -2,7 +2,6 @@
 #'
 #' @importFrom plotly plot_ly layout
 #' @importFrom dplyr summarize_at mutate_all
-#' @importFrom rlang abort
 #'
 #' @param df data frame
 #' @param cols character vector of binary columns to calculate groups from
@@ -24,17 +23,11 @@ sunburst <- function(df, cols, labels, parents, weighting_function = NULL, color
   # Getting integers from the data that sum up to parents integer perfectly, otherwise plotly silently fails
   data <- mutate_all(data, non_zero_round) %>% unlist
 
-  for (i in names(data)) {
+  for (i in rev(names(data))) {
     if (i %in% parents) {
       child_sum <- sum(data[parents %in% i])
       if (child_sum != data[i]) {
-        change <- data[i] - child_sum
-        if(abs(change) > 2) {
-          abort("child and parent data not aligning")
-        } else {
-          which_max <- names(which.max(data[parents %in% i]))
-          data[which_max] <- data[which_max] + change
-        }
+        data[i] <- child_sum
       }
     }
   }
