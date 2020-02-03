@@ -15,7 +15,7 @@ index_intersections(
   weighting_function = NULL,
   nintersects = 12,
   exclude_unique = T,
-  mututally_exclusive_sets = T,
+  mutually_exclusive_sets = T,
   round_to_1_percent = F,
   print_plot = F,
   plot_name = "intersection",
@@ -35,7 +35,11 @@ index_intersections(
 
 \item{nintersects}{number of intersections to include in the plot}
 
-\item{exclude_unique}{whether the set intersections should include singular sete. Note that if this is set to True, the total set size on the left will be wrong}
+\item{exclude_unique}{whether the set intersections should include singular sets. Note that if this is set to True, the total set size on the left will be wrong}
+
+\item{mutually_exclusive_sets}{whether}
+
+\item{round_to_1_percent}{whether to round the values}
 
 \item{print_plot}{logical column indicating whether or not to save the plot to PDF}
 

@@ -2,6 +2,7 @@
 #'
 #' @importFrom plotly plot_ly layout
 #' @importFrom dplyr summarize_at mutate_all
+#' @importFrom rlang abort
 #'
 #' @param df data frame
 #' @param cols character vector of binary columns to calculate groups from
