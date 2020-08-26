@@ -59,14 +59,14 @@ venn_msni <- function(df,
     }
     pdf(paste0(plot_name, ".pdf"))
     p <- plot(fit,
-         fills = list(fill = c("#EE5859", "#D1D3D4")),
+         fills = list(fill = c("#D1D3D4", "#EE5859")),
          labels = F)
     print(p)
     dev.off()
     p
   } else {
     plot(fit,
-         fills = list(fill = c("#EE5859", "#D1D3D4")),
+         fills = list(fill = c("#D1D3D4", "#EE5859")),
          labels = F)
   }
 }
