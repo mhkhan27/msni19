@@ -34,4 +34,4 @@ Suggests:
 VignetteBuilder: knitr
 Remotes: 
     ricardo-bion/ggradar,
-    caldwellst/Setviz
+    impact-initiatives/Setviz
