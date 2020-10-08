@@ -15,7 +15,7 @@
 #' @param path path to save plot to if not in current working directory
 #' @param index_threshold sectoral index threshold to graph percentage greater than (default=3)
 #'
-#' @importFrom dplyr filter transmute mutate mutate_at summarize_at rename bind_cols group_by arrange
+#' @importFrom dplyr filter transmute mutate mutate_at summarize_at rename bind_cols group_by arrange ungroup
 #' @importFrom tibble add_column
 #' @importFrom purrr map_df
 #' @importFrom rlang !! sym
