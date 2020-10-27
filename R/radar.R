@@ -70,7 +70,7 @@ radar_graph <- function(df,
     data <- mutate(data, group = factor(group, levels = group))
 
   } else {
-    data <- summarize_at(df, lsg, function(x) index_percent(df, as.character(substitute(x)), weighting_function)) %>%
+    data <- summarize_at(df, lsg, function(x) index_percent(df, as.character(substitute(x)), weighting_function, index_threshold)) %>%
       add_column(group = "", .before = 1)
   }
 
