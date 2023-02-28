@@ -4,7 +4,7 @@
 #' @param lsg character vector of all column names of LSG indices
 #' @param lsg_labels character vector of all labels for LSG indices
 #' @param index_filter numeric vector where index will get 1s if in the filter, and 0s otherwise
-#' @param weighting_function function for weighting the data frame
+#' @param weighting_function_or_column function for weighting the data frame OR column name containing the survey weights
 #' @param nintersects number of intersections to include in the plot
 #' @param exclude_unique whether the set intersections should include singular sets. Note that if this is set to True, the total set size on the left will be wrong
 #' @param mutually_exclusive_sets whether
@@ -19,12 +19,12 @@
 #' @export
 index_intersections <- function(df,
                                 lsg = c("education_lsg",
-                                "shelter_lsg",
-                                "fsl_lsg",
-                                "health_lsg",
-                                "nutrition_lsg",
-                                "protection_lsg",
-                                "wash_lsg"),
+                                        "shelter_lsg",
+                                        "fsl_lsg",
+                                        "health_lsg",
+                                        "nutrition_lsg",
+                                        "protection_lsg",
+                                        "wash_lsg"),
                                 lsg_labels = c("Education",
                                                "Shelter",
                                                "Food",
@@ -34,8 +34,8 @@ index_intersections <- function(df,
                                                "WASH"),
                                 y_label = "% in need per combination of sectors",
                                 index_filter = c(3,4,5),
-								weight_variable = NULL,
-                                weighting_function = NULL,
+                                weight_variable = NULL,
+                                weighting_function_or_column = NULL,
                                 nintersects = 12,
                                 exclude_unique = T,
                                 mutually_exclusive_sets = T,
@@ -44,9 +44,20 @@ index_intersections <- function(df,
                                 plot_name = "intersection",
                                 path = NULL) {
 
+  df$survey_weight <- df[[weighting_function_or_column]]
+
+  if(is.function(weighting_function_or_column)) {weighting_function_or_column <- weighting_function_or_column}
+  if(!is.function(weighting_function_or_column)) {weighting_function_or_column <- function(df){
+    df$survey_weight
+  }
+  }
+
+  df <- df |> filter(pmax(!!!syms(lsg),na.rm = T)> 2) ### getting rid of surveys with MSNI less than 3
+
   df <- mutate_at(df, lsg, ~ .x %in% index_filter)
+
   suppressWarnings(
-    if (!is.null(lsg_labels) & !is.na(lsg_labels)) {
+    if (!is.null(lsg_labels) & length(lsg_labels)!= 0) {
       df <- rename_at(df, lsg, ~ lsg_labels)
       lsg <- lsg_labels
     }
@@ -58,8 +69,8 @@ index_intersections <- function(df,
     pdf(paste0(plot_name, ".pdf"), width = 4, height = 4, onefile = F)
     p <- plot_set_percentages(df,
                               lsg,
-							  weight_variable = weight_variable,
-                              weighting_function = weighting_function,
+                              weight_variable = weight_variable,
+                              weighting_function =  weighting_function_or_column,
                               nintersects = nintersects,
                               exclude_unique = exclude_unique,
                               mutually_exclusive_sets = mutually_exclusive_sets,
@@ -72,7 +83,7 @@ index_intersections <- function(df,
     plot_set_percentages(df,
                          lsg,
                          weight_variable = weight_variable,
-                         weighting_function = weighting_function,
+                         weighting_function = weighting_function_or_column,
                          nintersects = nintersects,
                          exclude_unique = exclude_unique,
                          mutually_exclusive_sets = mutually_exclusive_sets,
@@ -80,3 +91,4 @@ index_intersections <- function(df,
                          label = y_label)
   }
 }
+
